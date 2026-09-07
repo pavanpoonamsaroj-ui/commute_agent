@@ -5,9 +5,9 @@ from map_agent import run_commute_planner
 st.title("🚗 AI Commute & Traffic Agent")
 st.markdown("Enter your route details below to generate a live traffic and transit strategy.")
 
-origin = st.text_input("Starting Point (Origin)", "RTC X Roads Hyderabad")
+origin = st.text_input("Starting Point (Origin)", "Isnapur X Roads Hyderabad")
 destination = st.text_input("Destination", "Ameerpet Hyderabad")
-phone_number = st.text_input("WhatsApp Phone Number (with country code)", "+917794862004")
+phone_number = st.text_input("WhatsApp Phone Number (with country code)", "+919392778715")
 
 if st.button("🚀 Generate Commute Strategy"):
     if not origin or not destination:
@@ -21,7 +21,7 @@ if st.button("🚀 Generate Commute Strategy"):
         st.markdown("### 📋 Live Agent Travel Strategy")
         st.write(commute_advice)
         
-        # Provide a clean pre-filled WhatsApp link so users can click to send instantly from their own device!
+        # WhatsApp web link for cloud deployment
         import urllib.parse
         encoded_message = urllib.parse.quote(f"Here is my daily commute strategy:\n{commute_advice}")
         whatsapp_url = f"https://wa.me/{phone_number.replace('+', '')}?text={encoded_message}"
