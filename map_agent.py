@@ -1,26 +1,38 @@
 import os
+import streamlit as st
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-# Load environment variables from .env
 load_dotenv()
 
-# Initialize the Gemini client
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# Check if running on Streamlit Cloud Secrets, otherwise use local .env
+api_key = None
+if "GEMINI_API_KEY" in st.secrets:
+    api_key = st.secrets["GEMINI_API_KEY"]
+else:
+    api_key = os.getenv("GEMINI_API_KEY")
+
+# Initialize the Gemini client explicitly with the key
+client = genai.Client(api_key=api_key)
 
 # Define your Google Maps tool function here (keep your existing implementation)
 def check_live_traffic_and_routes(origin: str, destination: str) -> str:
     """Fetches live traffic and route data using Google Maps Directions API."""
     import requests
-    api_key = os.getenv("GOOGLE_MAPS_API_KEY")
-    if not api_key:
-        return "Error: GOOGLE_MAPS_API_KEY is missing in your .env file."
+    
+    maps_key = None
+    if "GOOGLE_MAPS_API_KEY" in st.secrets:
+        maps_key = st.secrets["GOOGLE_MAPS_API_KEY"]
+    else:
+        maps_key = os.getenv("GOOGLE_MAPS_API_KEY")
         
-    url = f"https://maps.googleapis.com/maps/api/directions/json?origin={origin}&destination={destination}&departure_time=now&key={api_key}"
+    if not maps_key:
+        return "Error: GOOGLE_MAPS_API_KEY is missing."
+        
+    url = f"https://maps.googleapis.com/maps/api/directions/json?origin={origin}&destination={destination}&departure_time=now&key={maps_key}"
     response = requests.get(url)
     return response.text
-
 # Package the tool for Gemini
 my_tools = [check_live_traffic_and_routes]
 
