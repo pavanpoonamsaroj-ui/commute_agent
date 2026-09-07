@@ -3,4 +3,4 @@ google-genai
 requests
 pywhatkit
 pyperclip
-python-dotenvs
+python-dotenv
